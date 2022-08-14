@@ -1,3 +1,12 @@
+/*
+    Title: theme.css
+    Author: Jamal Eddine Damir
+    Date: august 14 2022
+    Description: Copy of CSS classes from Web-231 repository with additional elements 
+                 specific to class web-330.
+*/
+
+/* Declaring custom properties for light-theme*/
 body.light-theme {
     --text-color: #000;
     --background-color: #fff;
@@ -17,6 +26,8 @@ body.light-theme {
     --btn-hover-color: #4F3674;
     --input-border-color: #ccc;
 }
+
+/* Declaring custom properties for Dark-theme*/
 body.dark-theme {
     --text-color: #fafafa;
     --background-color: #303030;
@@ -36,6 +47,8 @@ body.dark-theme {
     --btn-hover-color: #fff;
     --input-border-color: #303030;
 }
+
+/* Styling body with class specific fonts and theme variables*/
 body {
     font-family: "Oswald",
         Verdana,
@@ -44,6 +57,8 @@ body {
     color: var(--text-color);
     background: var(--background-color);
 }
+
+/* Styling anchors with theme variables*/
 a {
     color: var(--anchor-color);
 }
@@ -51,6 +66,8 @@ a:hover {
     background-color: var(--anchor-hover-background-color);
     color: var(--anchor-hover-color);
 }
+
+/* Styling heading with theme variables*/
 h1 {
     color: var(--heading-color);
     background-color: var(--h1-background-color);
@@ -63,6 +80,8 @@ h2, h2,h3, h4 {
     padding: 10px;
     border: solid 1px var(--heading-border-color);
 }
+
+/* Styling card elemetents*/
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
@@ -84,6 +103,7 @@ h2, h2,h3, h4 {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* Styling button elements */
 .btn {
     border: none;
     text-align: center;
@@ -106,15 +126,8 @@ h2, h2,h3, h4 {
     color: var(--btn-hover-color);
 }
 
-.input {
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid var(--input-border-color);
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-.drop-down-menu {
+/* Styling input and drop-down menu elements */
+.input, .drop-down-menu {
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;

@@ -1,3 +1,16 @@
+/** 
+ * Title: theme.js
+ * Author: Jamal Eddine Damir
+ * Date: august 14 2022
+ * Description: Source code that stores user selected theme to local storage 
+                and sets default theme for when the user revisits the page.
+ * Source: Copied code from class web-330 GitHub Repository.
+*/
+
+
+
+
+
 /**
  * Set the default theme to light if one has not been set in the browsers localStorage
  */
