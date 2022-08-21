@@ -13,6 +13,10 @@
     margin-right: 100px;
 }
 
+.app-header {
+    text-align: center;
+}
+
 /* CSS properties to put the toggle icon on the top of the page*/
 #icon {
     margin-right: 100px;
@@ -71,7 +75,7 @@
     width: 600px;
     margin: 3% auto 0;
 }
-.assign-result-text {
+.assign-results-text {
     text-align: center;
     font-size: 28px;
 }
