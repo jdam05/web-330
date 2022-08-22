@@ -1,167 +1,193 @@
 <!DOCTYPE html>
+<!--
+    Title: Assignment 2.2 - Palindrome App
+    Author: Jamal Eddine Damir
+    Date: august 21, 2022
+    Description: The following code is to use HTML, CSS and JavaScript to create an app 
+                 that takes a phrase from the user and check is it is a palindrome. 
+                 the app also displays todays date in mm/dd/yyyy format and shows 
+                 the inout phrase's length and a reversed version of it.
+    Sources: 
+            * Source code from class GitHub Repository
+            * W3Schools.com
+            * Instructor provided assignment specific instructions
+-->
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEB 330 – Enterprise JavaScript II</title>
-    <link href="../theme.css" type="text/css" rel="stylesheet" />
-    <link href="../site.css" type="text/css" rel="stylesheet" />
-    <script src="../theme.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body>
-    <!-- Div for toggle icon -->
-    <div id="icon">
-    
-        <!-- Icon with onclick event that switches between dark and light mode -->
-        <i id="icon-mode" class="fa fa-toggle-off pull-right" onclick="toggleMode(this)" style="font-size: 28px;"><span
-                id="icon-text"></span>
-        </i>
-    </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>WEB 330 – Enterprise JavaScript II</title>
+		<link href="../theme.css" type="text/css" rel="stylesheet" />
+		<link href="../site.css" type="text/css" rel="stylesheet" />
+		<script src="../theme.js"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		/>
+	</head>
+	<body>
+		<!-- Div for toggle icon -->
+		<div id="icon">
+			<!-- Icon with onclick event that switches between dark and light mode -->
+			<i
+				id="icon-mode"
+				class="fa fa-toggle-off pull-right"
+				onclick="toggleMode(this)"
+				style="font-size: 28px"
+				><span id="icon-text"></span>
+			</i>
+		</div>
+		<!-- Main div containing all elements of the app-->
+		<main id="container">
+			<h1 class="app-header">Welcome to the Palindrome App!</h1>
 
-    <main id="container">
-        <h1 class="app-header">Welcome to the Palindrome App!</h1>
-        
-        <!--Card including the button the user clicks to display and shuffle cards-->
-        <div class="card">
-            <div class="card-title">Palindrome Checker</div>
-            <div class="card-content">
-                <div class="form">
-                <div class="form-field">
+			<!--Card including user input and button to trigger app onclick event-->
+			<div class="card">
+				<div class="card-title">Palindrome Checker</div>
+				<div class="card-content">
+					<div class="form">
+						<div class="form-field">
+							<label for="txtPhrase">Phrase value:</label>
 
-                <label for="txtPhrase">Phrase value:</label>
+							<!--Input for the user to enter a phrase -->
+							<input
+								type="text"
+								id="txtPhrase"
+								class="input"
+								name="txtPhrase"
+							/>
+						</div>
 
-            <!--Input for the user to enter a position -->
-                <input type="text" id="txtPhrase" class="input" name="txtPhrase" />
-                </div>
+						<div class="form-field">
+							<!--Button to be clicked to trigger phrase check-->
+							<button
+								type="submit"
+								class="btn btn-primary full-width"
+								id="btnCheckPhrase"
+							>
+								Check Phrase
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-                <div class="form-field">
-                <!--Button to be clicked to display cards and trigger the shuffle-->
-                    <button type="submit" class="btn btn-primary full-width" id="btnCheckPhrase">Check Phrase
-                    </button>
-                </div>
-                </div>
-            </div>
-        </div>
-        
-        <!--Link to web-231 index.html, the course landing page-->
-        <a class="return-home" href="../index.html">Return</a>
-        
-        <div class="card">
-            <!--Card displaying the results of for/of loop statement results-->
-            <div class="card-title">Palindrome Results</div>
-            <div class="card-content">
-            
-                
-                    <div id="assign-results-header"></div>
-                    <div id="assign-results" class="assign-results-text"></div>
-                </div>
-        </div>
+			<!--Link to web-330 index.html, the course landing page-->
+			<a class="return-home" href="../index.html">Return</a>
 
-        <script>
-               
-        /************************************************************************************************************************/
-        /************************************************** Default Theme Code *************************************************/
-                 
+			<div class="card">
+				<!--Card displaying results-->
+				<div class="card-title">Palindrome Results</div>
+				<div class="card-content">
+					<div id="assign-results-header"></div>
+					<div id="assign-results" class="assign-results-text"></div>
+				</div>
+			</div>
 
-             /* Set the default theme to light if one has not been set in the browsers localStorage
-             */
-                    setDefaultTheme();
+			<script>
+				/************************************************************************************************************************/
+				/************************************************** Default Theme Code *************************************************/
 
-                    /**
-                     * Function to switch the users selected website theme
-                     * @param x (this instance)
-                     */
-                    function toggleMode(x) {
-                        let colorTheme = document.body.classList; // get the body's CSS class
-                        let iconMode = x.classList; // get the current classes assigned to the triggered button
+				/* Set the default theme to light if one has not been set in the browsers localStorage
+				 */
+				setDefaultTheme();
 
-                        /**
-                         * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
-                         * local storage.
-                         */
-                        if (colorTheme.value === "light-theme") {
-                            localStorage.clear();
-                            localStorage.setItem("mode", "dark-theme");
-                            localStorage.setItem("iconMode", "fa-toggle-on");
-                            localStorage.setItem("iconText", "Dark Mode");
-                        }
-                        /**
-                         * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
-                         * local storage.
-                         */
-                        else {
-                            localStorage.clear();
-                            localStorage.setItem("mode", "light-theme");
-                            localStorage.setItem("iconMode", "fa-toggle-off");
-                            localStorage.setItem("iconText", "Light Mode");
-                        }
+				/**
+				 * Function to switch the users selected website theme
+				 * @param x (this instance)
+				 */
+				function toggleMode(x) {
+					let colorTheme = document.body.classList; // get the body's CSS class
+					let iconMode = x.classList; // get the current classes assigned to the triggered button
 
-                        /**
-                         * Apply the updated selection to the HTML page elements
-                         */
-                        colorTheme.value = localStorage.getItem("mode");
-                        iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
-                        document.getElementById("icon-text").innerHTML = localStorage.getItem("iconText");
-                    }
+					/**
+					 * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+					 * local storage.
+					 */
+					if (colorTheme.value === "light-theme") {
+						localStorage.clear();
+						localStorage.setItem("mode", "dark-theme");
+						localStorage.setItem("iconMode", "fa-toggle-on");
+						localStorage.setItem("iconText", "Dark Mode");
+					} else {
+						/**
+						 * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+						 * local storage.
+						 */
+						localStorage.clear();
+						localStorage.setItem("mode", "light-theme");
+						localStorage.setItem("iconMode", "fa-toggle-off");
+						localStorage.setItem("iconText", "Light Mode");
+					}
 
-            /*******************************************************************************************************************/
-            /************************************** End of Default Theme Code **************************************************/
-                
-            
+					/**
+					 * Apply the updated selection to the HTML page elements
+					 */
+					colorTheme.value = localStorage.getItem("mode");
+					iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+					document.getElementById("icon-text").innerHTML =
+						localStorage.getItem("iconText");
+				}
 
-                function getTodayDate() {
-                    return new Date().toLocaleDateString();
-                }
+				/*******************************************************************************************************************/
+				/************************************** End of Default Theme Code **************************************************/
 
-                function getLength(str) {
-                    return str.length;
-                }
-
-                function reverse(str) {
-                    let charArray = str.split("");
-                    let reversedCharArray = charArray.reverse(); 
-                    return reversedCharArray.join("");         
-                }
-
-                function isPalindrome(str) {
-
-                    if (reverse(str) === str) {
-                    return true;
-                    } else {
-                    return false;
-                    }
-                }
-            document.getElementById("btnCheckPhrase").onclick = function checkPhrase() {
-
-                let txtPhrase = document.getElementById("txtPhrase").value;
-                let  = assignResults = document.getElementById("assign-results").innerHTML;
-                let today = getTodayDate();
-                let len = getLength(txtPhrase);
-                let reversedPhrase = reverse(txtPhrase.toLowerCase());
-                let header = `Date: ${today} <br />
+				// Function that return today's date in mm/dd/yyyy format
+				function getTodayDate() {
+					return new Date().toLocaleDateString("en-US");
+				}
+				// Function that checks input length
+				function getLength(str) {
+					return str.length;
+				}
+				// function to reverse user input phrase
+				function reverse(str) {
+					let charArray = str.split("");
+					let reversedCharArray = charArray.reverse();
+					return reversedCharArray.join("");
+				}
+				// Compares if input string equal it's reversed version
+				function isPalindrome(str) {
+					if (reverse(str) === str) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+				// Onclick event to trigger the phrase check
+				document.getElementById("btnCheckPhrase").onclick =
+					function checkPhrase() {
+						let txtPhrase = document.getElementById("txtPhrase").value;
+						let assignResults =
+							document.getElementById("assign-results").innerHTML;
+						let today = getTodayDate();
+						let len = getLength(txtPhrase);
+						let reversedPhrase = reverse(txtPhrase.toLowerCase());
+						let header = `Date: ${today} <br />
                 Original Phrase: ${txtPhrase} <br />
                 Reversed Phrase: ${reversedPhrase} <br />
                 Phrase Length: ${len}`;
-
-                document.getElementById("assign-results-header").innerHTML = header;
-
-                if (isPalindrome(txtPhrase.toLowerCase()) === true) {
-                    document.getElementById("assign-results").innerHTML = `${txtPhrase.toLowerCase()} <b><u>is</u></b> a palindrome`;
-                } else {
-                    document.getElementById("assign-results").innerHTML = `${txtPhrase.toLowerCase()} <b><u>is not</u></b> a palindrome`;
-                }
-            
-
-
-
-            }
-        </script>
-
-    </main>
-</body>
+						// Binding header variable string to assign-results-header div
+						document.getElementById("assign-results-header").innerHTML = header;
+						// Checking if condition is met and binding string to assign-results div according to comparison result
+						if (isPalindrome(txtPhrase.toLowerCase()) === true) {
+							document.getElementById(
+								"assign-results"
+							).innerHTML = `${txtPhrase.toLowerCase()} <b><u>is</u></b> a palindrome`;
+						} else {
+							document.getElementById(
+								"assign-results"
+							).innerHTML = `${txtPhrase.toLowerCase()} <b><u>is not</u></b> a palindrome`;
+						}
+					};
+			</script>
+		</main>
+	</body>
 </html>
