@@ -1,0 +1,11 @@
+#grid {
+	display: grid;
+	grid-template-columns: auto auto;
+	margin: 10px;
+	column-gap: 10px;
+	row-gap: 10px;
+}
+
+.card {
+	padding-bottom: 10px;
+}
