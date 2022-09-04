@@ -1,0 +1,19 @@
+/*
+    Title: damir-calorie.css
+    Author: Jamal Eddine Damir
+    Date: September 03, 2022
+    Description: CSS styles for week-4 assignment
+*/
+
+/* Styling span element containing example food item string*/
+#foodList {
+	float: right;
+	color: #df546a;
+	font-size: 12px;
+	letter-spacing: 2px;
+}
+
+/* Reducing results table size to 30% */
+#searchResults {
+	width: 30%;
+}

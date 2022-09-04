@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--
+    Title: Assignment 4.2 - Calorie App.
+    Author: Jamal Eddine Damir
+    Date: September 3, 2022
+    Description: The following code is to use HTML, CSS and JavaScript to create an app 
+                 that allows the user to search for a food item, and displays 
+				 the result as an HTML table with the name of the food and it's calories data.
+    Sources: 
+            * Source code from class GitHub Repository
+            * W3Schools.com
+            * Instructor provided assignment specific instructions
+-->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>“WEB 330 – Enterprise JavaScript II</title>
+		<link href="../theme.css" type="text/css" rel="stylesheet" />
+		<link href="../site.css" type="text/css" rel="stylesheet" />
+		<link href="damir-calorie.css" type="text/css" rel="stylesheet" />
+		<script src="../theme.js"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		/>
+	</head>
+	<body>
+		<!-- Div for toggle icon -->
+		<div id="icon">
+			<!-- Icon with onclick event that switches between dark and light mode -->
+			<i
+				id="icon-mode"
+				class="fa fa-toggle-off pull-right"
+				onclick="toggleMode(this)"
+				style="font-size: 28px"
+				><span id="icon-text"></span>
+			</i>
+		</div>
+		<!-- Main div containing all elements of the app-->
+		<main id="container">
+			<h1 class="app-header">Welcome to the Calorie App!</h1>
+
+			<!--Card including user input and button to trigger app onclick event-->
+			<div class="card">
+				<div class="card-title">Calorie Search form</div>
+				<div class="card-content">
+					<div class="form">
+						<div class="form-field">
+							<label for="txtFoodItem">Enter a food item:</label>
+							<!--Input for the user to enter a food item-->
+							<input
+								type="text"
+								id="txtFoodItem"
+								class="input"
+								name="txtFoodItem"
+							/>
+							<br />
+							<!-- Text that show example of food items to be searched for-->
+							<span id="foodList"></span>
+						</div>
+
+						<div class="form-field">
+							<!--Button to be clicked to trigger food item search-->
+							<button
+								type="submit"
+								class="btn btn-primary full-width"
+								id="btnSearch"
+							>
+								Search
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--Link to web-330 index.html, the course landing page-->
+			<a class="return-home" href="../index.html">Return</a>
+
+			<div class="card">
+				<!--Card displaying results-->
+				<div class="card-title">Search Results</div>
+				<div class="card-content" id="searchResults"></div>
+			</div>
+		</main>
+		<script>
+			/************************************************************************************************************************/
+			/************************************************** Default Theme Code *************************************************/
+
+			/* Set the default theme to light if one has not been set in the browsers localStorage
+			 */
+			setDefaultTheme();
+
+			/**
+			 * Function to switch the users selected website theme
+			 * @param x (this instance)
+			 */
+			function toggleMode(x) {
+				let colorTheme = document.body.classList; // get the body's CSS class
+				let iconMode = x.classList; // get the current classes assigned to the triggered button
+
+				/**
+				 * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+				 * local storage.
+				 */
+				if (colorTheme.value === "light-theme") {
+					localStorage.clear();
+					localStorage.setItem("mode", "dark-theme");
+					localStorage.setItem("iconMode", "fa-toggle-on");
+					localStorage.setItem("iconText", "Dark Mode");
+				} else {
+					/**
+					 * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+					 * local storage.
+					 */
+					localStorage.clear();
+					localStorage.setItem("mode", "light-theme");
+					localStorage.setItem("iconMode", "fa-toggle-off");
+					localStorage.setItem("iconText", "Light Mode");
+				}
+
+				/**
+				 * Apply the updated selection to the HTML page elements
+				 */
+				colorTheme.value = localStorage.getItem("mode");
+				iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+				document.getElementById("icon-text").innerHTML =
+					localStorage.getItem("iconText");
+			}
+
+			/*********************************************End of Default Theme Code********************************************/
+			/*****************************************************************************************************************/
+		</script>
+		<script type="module">
+			// Class import
+			import { CalorieConverter } from "./calorie-converter.js";
+
+			// Assigning input to a variable.
+			const txtFoodItemEl = document.getElementById("txtFoodItem");
+
+			// Onclick event to trigger the search
+			document.getElementById("btnSearch").onclick = function SearchForItem() {
+				// Assigning input value to variable
+				const txtFoodItem = txtFoodItemEl.value;
+
+				// Using CalorieConverter find class with user input as parameter and assigning array to foods variable
+				const foods = CalorieConverter.find(txtFoodItem.toLowerCase());
+
+				// Creating string that starts an HTML table
+				let tableData = `<table class="table">
+						<tr>
+							<th>Name</th>
+							<th>Calories</th>
+						</tr>`;
+				// Iterating over foods variable and assigning object values to table data elements
+				for (const food of foods) {
+					tableData += `<tr>
+							<td>${food.name}</td>
+							<td>${food.calories}</td>
+						    </tr>`;
+				}
+
+				// Binding tableData variable string data to searchResults Div
+				document.getElementById(
+					"searchResults"
+				).innerHTML = `${tableData} </table>`;
+			};
+
+			// Event listener to trigger search for user input item when "Enter" is clicked on the keyboard
+			txtFoodItemEl.addEventListener("keypress", function (event) {
+				if (event.key === "Enter") {
+					document.getElementById("btnSearch").click();
+				}
+			});
+
+			// Assigning data array from CalorieConverter class to variable
+			let foodList = CalorieConverter.data;
+
+			// Creating string that for example text that goes inside span element
+			let foodListData = `<i>(EX: `;
+
+			// Loop that iterates over foodList array and populates foodListData string with food item names
+			for (const food of foodList) {
+				foodListData += `${food.name}, `;
+			}
+
+			// Binding foodListData string to foodList span and removing last two characters in the final string
+			document.getElementById("foodList").innerHTML = `${foodListData.slice(
+				0,
+				-2
+			)}) </i>`;
+		</script>
+	</body>
+</html>
