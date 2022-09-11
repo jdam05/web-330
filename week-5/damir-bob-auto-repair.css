@@ -1,0 +1,24 @@
+/**
+ * Title: damir-bob-auto-repair.css
+ * Date: September 10, 2022
+ * Author: Jamal Eddine Damir
+ * Description: CSS file containing shopping cart viewing instruction message styles
+ * Sources:
+ * Source code from class GitHub Repository
+ * W3Schools.com
+ * Instructor provided assignment specific instructions
+ */
+
+// exported FoodModel class with constructor that creates and initialized food item object
+
+/* Styling for cart viewing instructions*/
+#cart-message {
+	float: right;
+	color: #df546a;
+	font-size: 12px;
+	letter-spacing: 2px;
+}
+/* Changing cursor to pointer when hovering over instructions*/
+i:hover {
+	cursor: pointer;
+}
