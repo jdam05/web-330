@@ -9,9 +9,8 @@
  * Instructor provided assignment specific instructions
  */
 
-// exported FoodModel class with constructor that creates and initialized food item object
-
 /* Styling for cart viewing instructions*/
+
 #cart-message {
 	float: right;
 	color: #df546a;
