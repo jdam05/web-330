@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!--
+    Title: Assignment 6.2 - Bob's Automotive Repair Shop.
+    Author: Jamal Eddine Damir
+    Date: September 13, 2022
+    Description: HTML Docutent
+    Sources: 
+            * Source code from class GitHub Repository
+            * W3Schools.com
+            * Instructor provided assignment specific instructions
+-->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>“WEB 330 – Enterprise JavaScript II</title>
+		<link href="../theme.css" type="text/css" rel="stylesheet" />
+		<link href="../site.css" type="text/css" rel="stylesheet" />
+		<link href="../flex-layout.css" type="text/css" rel="stylesheet" />
+		<link href="damir-future-value.css" type="text/css" rel="stylesheet" />
+		<script src="../theme.js"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		/>
+	</head>
+	<body>
+		<!-- Div for toggle icon -->
+		<div id="icon">
+			<!-- Icon with onclick event that switches between dark and light mode -->
+			<i
+				id="icon-mode"
+				class="fa fa-toggle-off pull-right"
+				onclick="toggleMode(this)"
+				style="font-size: 28px"
+				><span id="icon-text"></span>
+			</i>
+		</div>
+		<!-- Main div containing all elements of the app-->
+		<main id="container">
+			<h1 class="app-header">Welcome to the Future Value App!</h1>
+
+			<!--Card including user input and button to trigger app onclick event-->
+			<div class="card">
+				<div class="card-title">Future Value Calculator<br /></div>
+				<div class="row col-12 danger" id="errorLog"></div>
+
+				<!--User input Card-->
+				<div class="card-content">
+					<div class="form">
+						<div class="form-field row">
+							<label for="txtMonthlyPayment" class="form-label col-5"
+								>Monthly Payment:</label
+							>
+							<!-- -->
+							<input
+								type="text"
+								id="txtMonthlyPayment"
+								class="input col-7"
+								name="txtMonthlyPayment"
+							/>
+						</div>
+
+						<div class="form-field row">
+							<label for="txtYearlyRate" class="form-label col-5"
+								>Interest Rate:</label
+							>
+							<!-- -->
+							<input
+								type="text"
+								id="txtYearlyRate"
+								class="input col-7"
+								name="txtYearlyRate"
+							/>
+						</div>
+
+						<i class="danger">Enter 11% as 11.1:</i>
+
+						<div class="form-field row">
+							<label for="listNumOfYears" class="form-label col-5"
+								>Number of Years:</label
+							>
+							<!-- List for to user to select services-->
+							<select
+								title="listNumOfYears"
+								class="drop-down-menu col-7"
+								id="listNumOfYears"
+							>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+							</select>
+						</div>
+
+						<div class="form-field">
+							<!--Button to be clicked to add services to cart-->
+							<button
+								type="submit"
+								class="btn btn-primary full-width"
+								id="btnCalculate"
+							>
+								Calculate
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--Link to web-330 index.html, the course landing page-->
+			<a class="return-home" href="../index.html">Return</a>
+
+			<div class="card">
+				<!--Card displaying items in cart-->
+				<div class="card-title">Calculation as of <span id="today"></span></div>
+				<div class="card-content" id="futureValue"></div>
+			</div>
+		</main>
+		<script>
+			/************************************************************************************************************************/
+			/************************************************** Default Theme Code *************************************************/
+
+			/* Set the default theme to light if one has not been set in the browsers localStorage
+			 */
+			setDefaultTheme();
+
+			/**
+			 * Function to switch the users selected website theme
+			 * @param x (this instance)
+			 */
+			function toggleMode(x) {
+				let colorTheme = document.body.classList; // get the body's CSS class
+				let iconMode = x.classList; // get the current classes assigned to the triggered button
+
+				/**
+				 * If the current body class is set to the light-theme, update the user's preference to the dark-theme in the browsers
+				 * local storage.
+				 */
+				if (colorTheme.value === "light-theme") {
+					localStorage.clear();
+					localStorage.setItem("mode", "dark-theme");
+					localStorage.setItem("iconMode", "fa-toggle-on");
+					localStorage.setItem("iconText", "Dark Mode");
+				} else {
+					/**
+					 * If the current body class is set to the dark-theme, update the user's preference to the light-theme in the browsers
+					 * local storage.
+					 */
+					localStorage.clear();
+					localStorage.setItem("mode", "light-theme");
+					localStorage.setItem("iconMode", "fa-toggle-off");
+					localStorage.setItem("iconText", "Light Mode");
+				}
+
+				/**
+				 * Apply the updated selection to the HTML page elements
+				 */
+				colorTheme.value = localStorage.getItem("mode");
+				iconMode.value = `fa ${localStorage.getItem("iconMode")} pull-right`;
+				document.getElementById("icon-text").innerHTML =
+					localStorage.getItem("iconText");
+			}
+
+			/*********************************************End of Default Theme Code********************************************/
+			/*****************************************************************************************************************/
+		</script>
+		<script type="module">
+			// Class import
+			import { FinanceCalculator } from "./finance-calculator.js";
+			import { Validator } from "./validator.js";
+
+			document.getElementById("today").innerHTML =
+				new Date().toLocaleDateString("en-US");
+
+			// Onclick event to add services to cart
+			document.getElementById("btnCalculate").onclick = function calculate() {
+				let monthlyPayment = document.getElementById("txtMonthlyPayment").value;
+				let rate = document.getElementById("txtYearlyRate").value;
+				let years = document.getElementById("listNumOfYears").value;
+				let errorLogEl = document.getElementById("errorLog");
+
+				let monthlyPaymentValidator = new Validator(
+					"Monthly Payment",
+					monthlyPayment
+				);
+
+				monthlyPaymentValidator.addRequiredField();
+				monthlyPaymentValidator.addRequiredFloatField();
+				monthlyPaymentValidator.addFloatMinField(100);
+
+				let rateValidator = new Validator("Interest Rate", rate);
+
+				rateValidator.addRequiredField();
+				rateValidator.addRequiredFloatField();
+				rateValidator.addFloatMaxField(100);
+
+				let errorLog = [];
+
+				if (!monthlyPaymentValidator.validate()) {
+					for (let msg of monthlyPaymentValidator.messages) {
+						errorLog.push(msg);
+					}
+				}
+
+				if (!rateValidator.validate()) {
+					for (let msg of rateValidator.messages) {
+						errorLog.push(msg);
+					}
+				}
+
+				if (monthlyPaymentValidator.validate() && rateValidator.validate()) {
+					errorLogEl.innerHTML = "";
+
+					let futureValue = FinanceCalculator.calculateFutureValue(
+						monthlyPayment,
+						rate,
+						years
+					);
+
+					document.getElementById(
+						"futureValue"
+					).innerHTML = `The future value is ${futureValue}`;
+				} else {
+					errorLogEl.innerHTML = "";
+
+					let errorLogMessage = `<ul>`;
+
+					for (let error of errorLog) {
+						errorLogMessage += `<li>${error}</li>`;
+					}
+					errorLogEl.innerHTML = `${errorLogMessage} </u>`;
+				}
+			};
+		</script>
+	</body>
+</html>
