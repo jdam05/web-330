@@ -232,7 +232,9 @@
 
 					document.getElementById(
 						"futureValue"
-					).innerHTML = `The future value is ${futureValue}`;
+					).innerHTML = `The future value is ${FinanceCalculator.convertToCurrency(
+						futureValue
+					)}`;
 				} else {
 					errorLogEl.innerHTML = "";
 
