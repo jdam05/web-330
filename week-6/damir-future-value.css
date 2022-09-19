@@ -1,9 +1,23 @@
+/**
+ * Title: damir-future-value.css
+ * Date: September 13, 2022
+ * Author: Jamal Eddine Damir
+ * Description: Error messages and form label styling
+ * Sources:
+ * Source code from class GitHub Repository
+ * W3Schools.com
+ * Instructor provided assignment specific instructions
+ */
+
+/* Error messages styling*/
 .danger {
 	float: right;
 	color: #df546a;
 	font-size: 12px;
 	letter-spacing: 2px;
 }
+
+/* Form label styling*/
 .form-label {
 	display: inline-block;
 	padding-top: 1rem;

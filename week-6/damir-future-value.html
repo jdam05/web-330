@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <!--
-    Title: Assignment 6.2 - Bob's Automotive Repair Shop.
+    Title: Assignment 6.2 - Future Value App.
     Author: Jamal Eddine Damir
     Date: September 13, 2022
-    Description: HTML Docutent
+    Description: Code for web application that calculates the future value
+				 based on the user's input.
     Sources: 
             * Source code from class GitHub Repository
             * W3Schools.com
@@ -87,7 +88,7 @@
 							<label for="listNumOfYears" class="form-label col-5"
 								>Number of Years:</label
 							>
-							<!-- List for to user to select services-->
+							<!-- List for to user to select Number of years-->
 							<select
 								title="listNumOfYears"
 								class="drop-down-menu col-7"
@@ -107,7 +108,7 @@
 						</div>
 
 						<div class="form-field">
-							<!--Button to be clicked to add services to cart-->
+							<!--Button to be clicked to trigger calculation-->
 							<button
 								type="submit"
 								class="btn btn-primary full-width"
@@ -124,7 +125,7 @@
 			<a class="return-home" href="../index.html">Return</a>
 
 			<div class="card">
-				<!--Card displaying items in cart-->
+				<!--Card displaying future value calculation results-->
 				<div class="card-title">Calculation as of <span id="today"></span></div>
 				<div class="card-content assign-results-text" id="futureValue"></div>
 			</div>
@@ -178,43 +179,51 @@
 			/*****************************************************************************************************************/
 		</script>
 		<script type="module">
-			// Class import
+			// Importing classes
 			import { FinanceCalculator } from "./finance-calculator.js";
 			import { Validator } from "./validator.js";
 
+			// Displaying today's date
 			document.getElementById("today").innerHTML =
 				new Date().toLocaleDateString("en-US");
 
-			// Onclick event to add services to cart
+			// Onclick event to calculate future value
 			document.getElementById("btnCalculate").onclick = function calculate() {
+				// Getting HTML Element and their values and assigning them to variables
 				let monthlyPayment = document.getElementById("txtMonthlyPayment").value;
 				let rate = document.getElementById("txtYearlyRate").value;
 				let years = document.getElementById("listNumOfYears").value;
 				let errorLogEl = document.getElementById("errorLog");
 
+				// Instantiating Validator class and passing in arguments for monthly payment
 				let monthlyPaymentValidator = new Validator(
 					"Monthly Payment",
 					monthlyPayment
 				);
 
+				// Setting monthly payment input field requirements
 				monthlyPaymentValidator.addRequiredField();
 				monthlyPaymentValidator.addRequiredFloatField();
 				monthlyPaymentValidator.addFloatMinField(100);
 
+				// Instantiating Validator class and passing in arguments for interest rate
 				let rateValidator = new Validator("Interest Rate", rate);
 
+				// Setting interest rate input field requirements
 				rateValidator.addRequiredField();
 				rateValidator.addRequiredFloatField();
 				rateValidator.addFloatMaxField(100);
 
+				// Empty array to hold errors
 				let errorLog = [];
 
+				// Pushing monthly payment input error message to errorLog array
 				if (!monthlyPaymentValidator.validate()) {
 					for (let msg of monthlyPaymentValidator.messages) {
 						errorLog.push(msg);
 					}
 				}
-
+				// Pushing interest rate input error message to errorLog array
 				if (!rateValidator.validate()) {
 					for (let msg of rateValidator.messages) {
 						errorLog.push(msg);
@@ -222,20 +231,24 @@
 				}
 
 				if (monthlyPaymentValidator.validate() && rateValidator.validate()) {
+					// Clearing error log if both statements are true
 					errorLogEl.innerHTML = "";
 
+					// Calculating future value based on user's input
 					let futureValue = FinanceCalculator.calculateFutureValue(
 						monthlyPayment,
 						rate,
 						years
 					);
 
+					// Binding result string to future value div
 					document.getElementById(
 						"futureValue"
 					).innerHTML = `The future value is ${FinanceCalculator.convertToCurrency(
 						futureValue
 					)}`;
 				} else {
+					// Displaying error message(s) if either or both of the statements are wrong
 					errorLogEl.innerHTML = "";
 
 					let errorLogMessage = `<ul>`;
