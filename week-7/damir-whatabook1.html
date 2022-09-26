@@ -49,13 +49,13 @@
 			<!-- Card displaying table with data loaded from books.xml-->
 			<div class="card">
 				<div class="card-title">Book Listing<br /></div>
-				<!-- Div displaying table-->
+				<!-- Div displaying table -->
 				<div class="card-content" id="bookList"></div>
 			</div>
 
 			<!--Link to web-330 index.html, the course landing page-->
 			<a class="return-home" href="../index.html">Return</a>
- 			<!-- Card displaying ISBN specific book data-->
+			<!-- Card displaying ISBN specific book data-->
 			<div class="card">
 				<div class="card-title">Selected Book</div>
 				<div class="card-content" id="selectedBook"></div>
@@ -110,12 +110,15 @@
 			/*****************************************************************************************************************/
 		</script>
 		<script>
+			// EventListener that displays XML records when the page loads
 			document.addEventListener("DOMContentLoaded", () => {
+				// Assigning books.xml to variable fileName
 				let fileName = "books.xml";
 
+				// Parsing the XML file
 				fetch(fileName)
-				.then(res => res.text())
-				.then(data => {
+					.then((res) => res.text())
+					.then((data) => {
 						let domParser = new DOMParser();
 						let xmlBooks = domParser.parseFromString(data, "text/xml");
 
@@ -123,6 +126,7 @@
 						addIsbnClickEvents();
 					});
 
+				// Loading the XML data and displaying it in a table
 				function loadBooks(xml) {
 					let books = xml.getElementsByTagName("book");
 					let tableData = `<table class="table" id="bookTable">
@@ -135,12 +139,19 @@
 						</tr>
 						<tbody>`;
 
+					// Iterating over the books data and populating the table data variable
 					for (let book of books) {
-						let isbn = book.getElementsByTagName("isbn")[0].childNodes[0].nodeValue;
-						let title = book.getElementsByTagName("title")[0].childNodes[0].nodeValue;
-						let description = book.getElementsByTagName("description")[0].childNodes[0].nodeValue;
-						let pages = book.getElementsByTagName("pages")[0].childNodes[0].nodeValue;
-						let authors = book.getElementsByTagName("authors")[0].childNodes[0].nodeValue;
+						let isbn =
+							book.getElementsByTagName("isbn")[0].childNodes[0].nodeValue;
+						let title =
+							book.getElementsByTagName("title")[0].childNodes[0].nodeValue;
+						let description =
+							book.getElementsByTagName("description")[0].childNodes[0]
+								.nodeValue;
+						let pages =
+							book.getElementsByTagName("pages")[0].childNodes[0].nodeValue;
+						let authors =
+							book.getElementsByTagName("authors")[0].childNodes[0].nodeValue;
 
 						tableData += `<tr>
 								<td data-value="ISBN"><a href="#" class="isbn-link">${isbn}</a></td>
@@ -151,9 +162,13 @@
 						</tr>`;
 					}
 
-					document.getElementById("bookList").innerHTML = `${tableData} </tbody></table>`;
+					// Binding tableData table string to bookList div
+					document.getElementById(
+						"bookList"
+					).innerHTML = `${tableData} </tbody></table>`;
 				}
 
+				// Function with code to be executed when ISBN link is clicked
 				function anchorClicked(e) {
 					e.preventDefault();
 
@@ -161,19 +176,24 @@
 					let cell = self.parentElement;
 					let row = cell.parentElement;
 
+					// Getting data in table row
 					let data = row.querySelectorAll("td");
 
+					// Starting clicked ISBN book data list and assigning it to variable
 					let bookData = `<ul style="list-style-type: none">`;
 
+					// Iterating over the data fields and populating bookData variable
 					for (let field of data) {
 						bookData += `<li><b>${field.dataset.value}:</b> ${field.textContent}</li>`;
 					}
 
+					// Binding bookData list string to selected book div
 					document.getElementById(
 						"selectedBook"
 					).innerHTML = `${bookData} </ul>`;
 				}
 
+				// Function to add event listener to all ISBN links
 				function addIsbnClickEvents() {
 					let viewButtons = document.querySelectorAll(
 						"#bookTable tbody .isbn-link"

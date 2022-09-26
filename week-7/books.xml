@@ -1,4 +1,18 @@
+<!--
+    Title: Assignment 7.2 - books.xml.
+    Author: Jamal Eddine Damir
+    Date: September 21, 2022
+    Description: XML file containing book data to be accessed and displayed
+                 in damir-whatabook1.html page.
+    Sources: 
+            * Source code from class GitHub Repository
+            * W3Schools.com
+            * Instructor provided assignment specific instructions
+-->
+
+<!-- Parent book tag inluding all the books and their data-->
 <books>
+    <!-- Child element tag including book-1 specific data -->
     <book>
         <isbn>9780345339683</isbn>
         <title>The Hobbit or There and Back Again</title>
@@ -6,6 +20,7 @@
         <pages>287</pages>
         <authors>J.R.R. Tolkien</authors>
     </book>
+    <!-- Child element tag including book-2 specific data -->
     <book>
         <isbn>9780261103573</isbn>
         <title>The Fellowship of the Ring</title>
@@ -13,6 +28,7 @@
         <pages>416</pages>
         <authors>J.R.R. Tolkien</authors>
     </book>
+    <!-- Child element tag including book-3 specific data -->
     <book>
         <isbn>9780261102361</isbn>
         <title>The Two Towers</title>
@@ -20,6 +36,7 @@
         <pages>442</pages>
         <authors>J.R.R. Tolkien</authors>
     </book>
+    <!-- Child element tag including book-4 specific data -->
     <book>
         <isbn>9780261102378</isbn>
         <title>The Return of the King</title>
@@ -27,6 +44,7 @@
         <pages>556</pages>
         <authors>J.R.R. Tolkien</authors>
     </book>
+    <!-- Child element tag including book-5 specific data -->
     <book>
         <isbn>9780593099322</isbn>
         <title>Dune: Deluxe Edition</title>
@@ -34,6 +52,7 @@
         <pages>688</pages>
         <authors>Frank Herbert</authors>
     </book>
+    <!-- Child element tag including book-6 specific data -->
     <book>
         <isbn>9780316769532</isbn>
         <title>The Cather in the Rye</title>
