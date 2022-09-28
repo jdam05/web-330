@@ -1,0 +1,14 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open damir-whatabook2.html",
+            "file": "/Users/jamaldamir/Documents/School/fall2022/class-web-330/git/web-330/week-8/damir-whatabook2.html"
+        }
+    ]
+}
