@@ -148,14 +148,14 @@
 						console.log(e);
 					});
 
-				function getBooks(e) {
+				function getBook(e) {
 					e.preventDefault();
 
 					let self = this;
 					let isbn = self.innerText;
 
 					const params = {
-						"bibkeys": `ISBN: ${isbns.join(",")}`,
+						"bibkeys": `ISBN:${isbn}`,
 						"format": "json",
 						"jscmd": "details",
 					};
@@ -247,7 +247,7 @@
 					);
 
 					for (let i = 0; i < viewButtons.length; i++) {
-						viewButtons[i].addEventListener("click", getBooks);
+						viewButtons[i].addEventListener("click", getBook);
 					}
 				}
 		</script>
