@@ -2,9 +2,9 @@
 <!--
     Title: Assignment 7.2 - WhatABook, Part2.
     Author: Jamal Eddine Damir
-    Date: September 27, 2022
+    Date: october 1, 2022
     Description: Code for web application that demonstrates how to load books data from
-				 books XML file and display it inside an HTML table. When the use click an 
+				 an API and display it inside an HTML table. When the use click an 
 				 ISBN, specific data is displayed as a list on a separate card.
     Sources: 
             * Source code from class GitHub Repository
@@ -47,7 +47,7 @@
 		<main id="container">
 			<h1 class="app-header">Welcome to the WhatABook, Part 2 App!</h1>
 
-			<!-- Card displaying table with data loaded from books.xml-->
+			<!-- Card displaying table with data loaded from API-->
 			<div class="card">
 				<div class="card-title">Book Listing<br /></div>
 				<!-- Div displaying table -->
@@ -114,64 +114,79 @@
 			// Importing class
 			import { HttpClient } from "./http-client.js";
 
-				let http = new HttpClient();
+			// Instance of the HttpClient imported class
+			let http = new HttpClient();
 
-				const isbns = [
-					"0345339681",
-					"0261103571",
-					"9780593099322",
-					"9780261102361",
-					"9780261102378",
-					"9780590302715",
-					"9780316769532",
-					"9780743273565",
-					"9780590405959",
-				];
+			// Array containing ISBNS of books to be displayed
+			const isbns = [
+				"0345339681",
+				"0261103571",
+				"9780593099322",
+				"9780261102361",
+				"9780261102378",
+				"9780590302715",
+				"9780316769532",
+				"9780743273565",
+				"9780590405959",
+			];
+
+			// Parameters to be passed to async get function
+			const params = {
+				bibkeys: `ISBN: ${isbns.join(",")}`,
+				format: "json",
+				jscmd: "details",
+			};
+
+			// Http get method that binds the returned data to bookList div
+			http
+				.get("https://openlibrary.org/api/books", params)
+				.then((res) => {
+					console.log(res);
+
+					document.getElementById("bookList").innerHTML = buildHtmlString(
+						res,
+						"table"
+					);
+					// Calling function that adds click event listeners to ISBNs
+					addIsbnClickEvents();
+				})
+				//logging errors if any
+				.catch((e) => {
+					console.log(e);
+				});
+
+			function getBook(e) {
+				e.preventDefault();
+
+				let self = this;
+				let isbn = self.innerText;
 
 				const params = {
-					"bibkeys": `ISBN: ${isbns.join(",")}`,
-					"format": "json",
-					"jscmd": "details",
+					bibkeys: `ISBN:${isbn}`,
+					format: "json",
+					jscmd: "details",
 				};
 
-				http.get("https://openlibrary.org/api/books", params).then((res) => {
+				// Http get method that binds the returned data to selectedBook ul
+				http
+					.get("https://openlibrary.org/api/books", params)
+					.then((res) => {
 						console.log(res);
 
-						document.getElementById("bookList").innerHTML = buildHtmlString(
+						document.getElementById("selectedBook").innerHTML = buildHtmlString(
 							res,
-							"table"
+							"ul"
 						);
-
-						addIsbnClickEvents();
 					})
 					.catch((e) => {
 						console.log(e);
 					});
+			}
 
-				function getBook(e) {
-					e.preventDefault();
-
-					let self = this;
-					let isbn = self.innerText;
-
-					const params = {
-						"bibkeys": `ISBN:${isbn}`,
-						"format": "json",
-						"jscmd": "details",
-					};
-					http.get("https://openlibrary.org/api/books", params).then((res) => {
-							console.log(res);
-
-							document.getElementById("selectedBook").innerHTML =
-								buildHtmlString(res, "ul");
-						})
-						.catch((e) => {
-							console.log(e);
-						});
-				}
-
-				function buildHtmlString(res, format) {
-					let tableString = `<table class="table" id="bookTable">
+			// Building table that displays book data
+			function buildHtmlString(res, format) {
+				// Starting table by assigning table header data to variable
+				let tableString = `<table class="table" id="bookTable">
 						<tr>
 							<th>ISBN</th>
 							<th>Title</th>
@@ -181,75 +196,79 @@
 						</tr>
 						<tbody>`;
 
+				// Starting ul and assigning to variable
+				let ulString = "";
 
-					let ulString = "";
+				// Iterating over response elements
+				for (let key in res) {
+					// Populating ul string with ul tag
+					ulString += `<ul style="list-style-type: none;">`;
 
-					for (let key in res) {
+					// Conditional statement that checks if response has key property
+					if (res.hasOwnProperty(key)) {
+						//Authors empty array
+						let authors = [];
 
+						if (res[key].details.authors) {
+							authors = res[key].details.authors.map(function (author) {
+								return author.name;
+							});
+						}
+						// Creating book object with book specific data
+						let book = {
+							isbn: res[key].details.isbn_13
+								? res[key].details.isbn_13
+								: res[key].details.isbn_10,
+							title: res[key].details.title,
+							description: res[key].details.subtitle
+								? res[key].details.subtitle
+								: "N/A",
+							pages: res[key].details.number_of_pages
+								? res[key].details.number_of_pages
+								: "N/A",
+							authors: authors.join(","),
+						};
 
-						ulString += `<ul style="list-style-type: none;">`;
-
-						if (res.hasOwnProperty(key)) {
-
-							let authors = [];
-
-							if (res[key].details.authors) {
-								authors = res[key].details.authors.map(function(author) {
-									return author.name;
-								})
-							}
-
-							let book = {
-								isbn: res[key].details.isbn_13
-									? res[key].details.isbn_13
-									: res[key].details.isbn_10,
-								title: res[key].details.title,
-								description: res[key].details.subtitle
-									? res[key].details.subtitle
-									: "N/A",
-								pages: res[key].details.number_of_pages
-									? res[key].details.number_of_pages
-									: "N/A",
-								authors: authors.join(",")
-							};
-
-							ulString += `<li><b>ISBN:</b> ${book.isbn}</li>
+						// Populating ul string with book specific data
+						ulString += `<li><b>ISBN:</b> ${book.isbn}</li>
                                 <li><b>Title:</b> ${book.title}</li>
                                 <li><b>Description:</b> ${book.description}</li>
                                 <li><b>Pages:</b> ${book.pages}</li>
                                 <li><b>Authors:</b> ${book.authors}</li>`;
-
-							tableString += `<tr>
+						// populating table data elements with book specific data
+						tableString += `<tr>
 								<td><a href="#" class="isbn-link">${book.isbn}</a></td>
 								<td>${book.title}</td>
 								<td>${book.description}</td>
 								<td>${book.pages}</td>
 								<td>${book.authors}</td>
 						</tr>`;
-						}
-					}
-
-					ulString += `</ul>`;
-					tableString += `</tbody></table>`;
-					
-
-					if (format === "table") {
-						return tableString;
-					} else {
-						return ulString;
-					}
-				
-				}
-
-				function addIsbnClickEvents() {
-					let viewButtons = document.querySelectorAll(
-						"#bookTable tbody .isbn-link"
-					);
-
-					for (let i = 0; i < viewButtons.length; i++) {
-						viewButtons[i].addEventListener("click", getBook);
 					}
 				}
+
+				// Closing ul
+				ulString += `</ul>`;
+				// Closing table
+				tableString += `</tbody></table>`;
+
+				// conditional statement to return either the tableString or the ul String
+				if (format === "table") {
+					return tableString;
+				} else {
+					return ulString;
+				}
+			}
+
+			// Function that adds click event listener to ISBNS in table
+			function addIsbnClickEvents() {
+				let viewButtons = document.querySelectorAll(
+					"#bookTable tbody .isbn-link"
+				);
+
+				for (let i = 0; i < viewButtons.length; i++) {
+					viewButtons[i].addEventListener("click", getBook);
+				}
+			}
 		</script>
 	</body>
 </html>
